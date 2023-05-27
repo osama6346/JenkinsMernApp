@@ -1,0 +1,35 @@
+version: '3.7'
+
+services:
+
+  server:
+    image: ecommerce-backend
+    container_name: express
+    volumes:
+      - ./server/:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "4000:4000"
+    env_file: ./backend/.env
+    environment:
+      - MONGODB_URL=mongodb+srv://osamaiqbal0986346:894fce30@cluster0.jxc36qa.mongodb.net/ecommerce?retryWrites=true;
+      - PORT=4000
+    networks:
+      - app-network
+
+  client:
+    image: ecommerce-frontend
+    container_name: react
+    volumes:
+      - ./client/:/usr/app
+      - /usr/app/node_modules
+    depends_on:
+      - server
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
